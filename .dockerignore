@@ -1,0 +1,20 @@
+# Ignore common files and directories
+.git
+.github
+.vscode
+*.log
+*.md
+docker-compose.yml
+docker-compose.prod.yml
+
+# Ignore Go build artifacts
+*.exe
+*.test
+*.prof
+*.out
+*.test
+*.test.exe
+*.test.out
+
+# Ignore vendor directory (if you're using Go modules, this can be removed)
+vendor/

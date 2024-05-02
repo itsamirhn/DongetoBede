@@ -1,0 +1,43 @@
+# options for analysis running
+run:
+  concurrency: 8
+  deadline: 5m
+
+  # include test files or not
+  tests: true
+
+  skip-dirs:
+    - mocks
+
+# output configuration options
+output:
+  # colored-line-number|line-number|json|tab|checkstyle
+  format: colored-line-number
+
+# all available settings of specific linters
+linters-settings:
+  lll:
+    line-length: 120
+
+issues:
+  exclude-rules:
+    - linters:
+        - lll
+    - linters:
+        - revive
+      source: '_ "time/tzdata"'
+
+linters:
+  enable:
+    - revive
+    - errcheck
+    - megacheck
+    - unused
+    - unconvert
+    - ineffassign
+    - gofmt
+    - lll
+    - gosec
+    - govet
+    - gosimple
+    - goimports

@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  bot:
+    image: ghcr.io/itsamirhn/dongetobede:${DONG_VERSION:-latest}
+    command: serve
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    labels:
+      caddy: dong.amirhn.com
+      caddy.reverse_proxy: "{{upstreams 80}}"
+    environment:
+      - DONG_DB_URI=mongodb://mongodb:27017
+      - DONG_BOT_LISTEN_PORT=80
+      - DONG_BOT_TOKEN=${BOT_TOKEN}
+      - DONG_BOT_ENDPOINT=dong.amirhn.com
+      -
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:2.8.11-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - bot
+      - sub
+    environment:
+      - CADDY_INGRESS_NETWORKS=dong_default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:latest
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+networks:
+  dong_default:
+    external: true
+
+volumes:
+  mongo_data: {}
+  caddy_data: {}
