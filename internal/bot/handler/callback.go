@@ -5,12 +5,12 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/itsamirhn/dongetobede/internal/database/entities"
-
-	"github.com/itsamirhn/dongetobede/internal/database"
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"gopkg.in/telebot.v3"
+
+	"github.com/itsamirhn/dongetobede/internal/database"
+	"github.com/itsamirhn/dongetobede/internal/database/entities"
 )
 
 type callback struct {
@@ -57,14 +57,14 @@ func (c *callback) Handle(ctx telebot.Context) error {
 		err = ctx.Respond(&telebot.CallbackResponse{
 			Text: "دونگ شما پس گرفته شد!",
 		})
-		if err != nil {
-			return errors.Wrap(err, "failed to respond")
-		}
 	} else {
 		dong.PaidUserIDs = append(dong.PaidUserIDs, user.ID)
 		err = ctx.Respond(&telebot.CallbackResponse{
 			Text: "دونگ شما ثبت شد!",
 		})
+	}
+	if err != nil {
+		return errors.Wrap(err, "failed to respond")
 	}
 	err = c.db.UpdateDong(context.Background(), dong)
 	if err != nil {
@@ -75,5 +75,9 @@ func (c *callback) Handle(ctx telebot.Context) error {
 	if err != nil {
 		return errors.Wrap(err, "failed to get paid users")
 	}
-	return ctx.Edit(getDongText(dong.Amount, dong.TotalPeople, dong.CardNumber, paidUsers), telebot.ModeMarkdown, getDongMarkup(len(dong.PaidUserIDs), dong.TotalPeople, dong.CardNumber, dong.ID))
+	return ctx.Edit(
+		getDongText(dong.Amount, dong.TotalPeople, dong.CardNumber, paidUsers),
+		telebot.ModeMarkdown,
+		getDongMarkup(len(dong.PaidUserIDs), dong.TotalPeople, dong.CardNumber, dong.ID),
+	)
 }

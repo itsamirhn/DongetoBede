@@ -3,12 +3,12 @@ package database
 import (
 	"context"
 
+	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/itsamirhn/dongetobede/internal/database/entities"
-	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type client struct {

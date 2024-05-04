@@ -5,12 +5,11 @@ import (
 	"math"
 	"strconv"
 
-	"github.com/itsamirhn/dongetobede/internal/database/entities"
+	"github.com/mavihq/persian"
+	"gopkg.in/telebot.v3"
 
 	"github.com/itsamirhn/dongetobede/internal/database"
-	"github.com/mavihq/persian"
-
-	"gopkg.in/telebot.v3"
+	"github.com/itsamirhn/dongetobede/internal/database/entities"
 )
 
 type query struct {

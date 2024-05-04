@@ -4,10 +4,11 @@ import (
 	"context"
 	"regexp"
 
-	"github.com/itsamirhn/dongetobede/internal/database"
-	"github.com/itsamirhn/dongetobede/internal/database/entities"
 	"github.com/mavihq/persian"
 	"gopkg.in/telebot.v3"
+
+	"github.com/itsamirhn/dongetobede/internal/database"
+	"github.com/itsamirhn/dongetobede/internal/database/entities"
 )
 
 var cardNumberRegexPattern = regexp.MustCompile(`^[2569]\d{15}$`)

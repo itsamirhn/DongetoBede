@@ -3,10 +3,11 @@ package middleware
 import (
 	"context"
 
-	"github.com/itsamirhn/dongetobede/internal/database"
-	"github.com/itsamirhn/dongetobede/internal/database/entities"
 	"github.com/pkg/errors"
 	"gopkg.in/telebot.v3"
+
+	"github.com/itsamirhn/dongetobede/internal/database"
+	"github.com/itsamirhn/dongetobede/internal/database/entities"
 )
 
 func NewUserRetriever(db database.Client) telebot.MiddlewareFunc {

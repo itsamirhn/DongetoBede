@@ -3,9 +3,10 @@ package handler
 import (
 	"context"
 
+	"gopkg.in/telebot.v3"
+
 	"github.com/itsamirhn/dongetobede/internal/database"
 	"github.com/itsamirhn/dongetobede/internal/database/entities"
-	"gopkg.in/telebot.v3"
 )
 
 type setCard struct {

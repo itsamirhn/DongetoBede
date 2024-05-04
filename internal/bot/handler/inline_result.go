@@ -5,10 +5,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/itsamirhn/dongetobede/internal/database"
-	"github.com/itsamirhn/dongetobede/internal/database/entities"
 	"github.com/pkg/errors"
 	"gopkg.in/telebot.v3"
+
+	"github.com/itsamirhn/dongetobede/internal/database"
+	"github.com/itsamirhn/dongetobede/internal/database/entities"
 )
 
 type inline struct {
@@ -52,5 +53,9 @@ func (c *inline) Handle(ctx telebot.Context) error {
 		return err
 	}
 	dong.ID = dongID
-	return ctx.Edit(getDongText(dong.Amount, dong.TotalPeople, dong.CardNumber, []*entities.User{user}), telebot.ModeMarkdown, getDongMarkup(len(dong.PaidUserIDs), dong.TotalPeople, dong.CardNumber, dong.ID))
+	return ctx.Edit(
+		getDongText(dong.Amount, dong.TotalPeople, dong.CardNumber, []*entities.User{user}),
+		telebot.ModeMarkdown,
+		getDongMarkup(len(dong.PaidUserIDs), dong.TotalPeople, dong.CardNumber, dong.ID),
+	)
 }

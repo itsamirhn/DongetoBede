@@ -18,11 +18,16 @@ output:
 linters-settings:
   lll:
     line-length: 120
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(github.com/itsamirhn)
+      - prefix(github.com/itsamirhn/dongetobede)
+    skip-generated: true
 
 issues:
   exclude-rules:
-    - linters:
-        - lll
     - linters:
         - revive
       source: '_ "time/tzdata"'
@@ -37,7 +42,8 @@ linters:
     - ineffassign
     - gofmt
     - lll
-    - gosec
     - govet
     - gosimple
     - goimports
+    - gci
+    - gofumpt

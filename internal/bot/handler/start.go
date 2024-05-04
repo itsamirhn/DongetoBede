@@ -3,8 +3,9 @@ package handler
 import (
 	"strings"
 
-	"github.com/itsamirhn/dongetobede/internal/database"
 	"gopkg.in/telebot.v3"
+
+	"github.com/itsamirhn/dongetobede/internal/database"
 )
 
 type start struct {

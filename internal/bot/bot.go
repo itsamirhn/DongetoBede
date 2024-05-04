@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/itsamirhn/dongetobede/internal/bot/middleware"
-
 	"gopkg.in/telebot.v3"
 
 	"github.com/itsamirhn/dongetobede/internal/bot/handler"
+	"github.com/itsamirhn/dongetobede/internal/bot/middleware"
 	"github.com/itsamirhn/dongetobede/internal/config"
 	"github.com/itsamirhn/dongetobede/internal/database"
 	"github.com/itsamirhn/dongetobede/pkg"
@@ -54,11 +53,10 @@ func (b *Bot) registerCommands(commands []handler.Command) {
 func getTelebotPoller(endpoint, listenPort string) telebot.Poller {
 	if config.GlobalConfig.DebugMode {
 		return &telebot.LongPoller{Timeout: 10 * time.Second}
-	} else {
-		return &telebot.Webhook{
-			Endpoint:    &telebot.WebhookEndpoint{PublicURL: endpoint},
-			Listen:      fmt.Sprintf(":%v", listenPort),
-			SecretToken: pkg.RandString(10),
-		}
+	}
+	return &telebot.Webhook{
+		Endpoint:    &telebot.WebhookEndpoint{PublicURL: endpoint},
+		Listen:      fmt.Sprintf(":%v", listenPort),
+		SecretToken: pkg.RandString(10),
 	}
 }

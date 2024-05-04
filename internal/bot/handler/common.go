@@ -2,16 +2,21 @@ package handler
 
 import (
 	"fmt"
-	"github.com/itsamirhn/dongetobede/internal/database/entities"
 	"math"
 	"strconv"
 
 	"github.com/mavihq/persian"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"gopkg.in/telebot.v3"
+
+	"github.com/itsamirhn/dongetobede/internal/database/entities"
 )
 
-func getDongMarkup(paidUsersCount, totalPeople int, cardNumber string, dongID *primitive.ObjectID) *telebot.ReplyMarkup {
+func getDongMarkup(
+	paidUsersCount, totalPeople int,
+	_ string,
+	dongID *primitive.ObjectID,
+) *telebot.ReplyMarkup {
 	paidUsersCountStr := persian.ToPersianDigitsFromInt(paidUsersCount)
 	totalPeopleStr := persian.ToPersianDigitsFromInt(totalPeople)
 	btnText := fmt.Sprintf("دنگمو دادم (%s/%s)", paidUsersCountStr, totalPeopleStr)

@@ -4,8 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/itsamirhn/dongetobede/internal/database"
-
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -14,6 +12,7 @@ import (
 
 	"github.com/itsamirhn/dongetobede/internal/bot"
 	"github.com/itsamirhn/dongetobede/internal/config"
+	"github.com/itsamirhn/dongetobede/internal/database"
 )
 
 func init() {
@@ -26,7 +25,7 @@ var serveCmd = &cobra.Command{
 	Run:   serve,
 }
 
-func serve(cmd *cobra.Command, args []string) {
+func serve(cmd *cobra.Command, _ []string) {
 	defer func() {
 		if err := recover(); err != nil {
 			logrus.Panic(err)
@@ -35,7 +34,13 @@ func serve(cmd *cobra.Command, args []string) {
 	loadConfigOrPanic(cmd)
 
 	mc := createMongoClientOrPanic()
-	defer mc.Disconnect(context.Background())
+
+	defer func() {
+		if err := mc.Disconnect(context.Background()); err != nil {
+			logrus.WithError(err).Error("failed to disconnect from mongo")
+		}
+	}()
+
 	db := database.NewMongoClient(mc, config.GlobalConfig.DB.Name)
 
 	b := createBotOrPanic(db)
