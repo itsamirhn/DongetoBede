@@ -38,6 +38,7 @@ func NewBot(db database.Client, token string, endpoint string, listenPort string
 		handler.NewInline(db),
 		handler.NewCallback(db),
 		handler.NewText(db),
+		handler.NewHelp(),
 	})
 
 	return bot, nil

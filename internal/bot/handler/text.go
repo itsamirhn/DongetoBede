@@ -40,5 +40,5 @@ func (c *text) Handle(ctx telebot.Context) error {
 		}
 		return ctx.Reply("شماره کارت شما با موفقیت ثبت شد.")
 	}
-	return nil
+	return ctx.Reply("برای راهنمایی کار با بات، از دستور /help استفاده کنید.")
 }
