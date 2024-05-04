@@ -43,6 +43,19 @@ func (c *client) GetUserByID(ctx context.Context, id int64) (*entities.User, err
 	return &user, nil
 }
 
+func (c *client) GetUsersByIDs(ctx context.Context, ids []int64) ([]*entities.User, error) {
+	cursor, err := c.db.Collection(entities.UserCollectionName).Find(ctx, bson.M{"_id": bson.M{"$in": ids}})
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get users by IDs")
+	}
+	defer cursor.Close(ctx)
+	var users []*entities.User
+	if err := cursor.All(ctx, &users); err != nil {
+		return nil, errors.Wrap(err, "failed to get users by IDs")
+	}
+	return users, nil
+}
+
 func (c *client) UpdateUser(ctx context.Context, user *entities.User) error {
 	_, err := c.db.Collection(entities.UserCollectionName).UpdateOne(ctx, bson.M{"_id": user.ID}, bson.M{"$set": *user})
 	if err != nil {

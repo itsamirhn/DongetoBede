@@ -10,7 +10,7 @@ COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o /go/dong
 
-FROM debian:stretch-slim as runner
+FROM alpine:latest as runner
 
 COPY --from=builder /go/dong /usr/local/bin/dong
 

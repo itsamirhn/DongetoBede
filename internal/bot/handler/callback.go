@@ -70,5 +70,10 @@ func (c *callback) Handle(ctx telebot.Context) error {
 	if err != nil {
 		return errors.Wrap(err, "failed to update dong")
 	}
-	return ctx.Edit(getDongMarkup(len(dong.PaidUserIDs), dong.TotalPeople, dong.CardNumber, dong.ID))
+
+	paidUsers, err := c.db.GetUsersByIDs(context.Background(), dong.PaidUserIDs)
+	if err != nil {
+		return errors.Wrap(err, "failed to get paid users")
+	}
+	return ctx.Edit(getDongText(dong.Amount, dong.TotalPeople, dong.CardNumber, paidUsers), telebot.ModeMarkdown, getDongMarkup(len(dong.PaidUserIDs), dong.TotalPeople, dong.CardNumber, dong.ID))
 }

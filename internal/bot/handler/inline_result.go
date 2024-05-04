@@ -52,5 +52,5 @@ func (c *inline) Handle(ctx telebot.Context) error {
 		return err
 	}
 	dong.ID = dongID
-	return ctx.Edit(getDongMarkup(1, totalPeople, dong.CardNumber, dongID))
+	return ctx.Edit(getDongText(dong.Amount, dong.TotalPeople, dong.CardNumber, []*entities.User{user}), telebot.ModeMarkdown, getDongMarkup(len(dong.PaidUserIDs), dong.TotalPeople, dong.CardNumber, dong.ID))
 }

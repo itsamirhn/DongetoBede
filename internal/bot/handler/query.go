@@ -29,16 +29,13 @@ func (c *query) getValidArticle(amount, totalPeople int, cardNumber string) *tel
 	perPerson := int(math.Ceil(float64(amount) / float64(totalPeople)))
 	perPersonStr := persian.Toman(strconv.Itoa(perPerson))
 	totalPeopleStr := persian.ToPersianDigitsFromInt(totalPeople)
-	text := fmt.Sprintf("نفری %s", perPersonStr)
-	if cardNumber != "" {
-		text += fmt.Sprintf("\nشماره کارت: `%s`", persian.ToEnglishDigits(cardNumber))
-	}
+	txt := getDongText(amount, totalPeople, cardNumber, nil)
 	res := &telebot.ArticleResult{
 		Title:       fmt.Sprintf("دنگ %s نفره", totalPeopleStr),
 		Description: fmt.Sprintf("نفری %s", perPersonStr),
-		Text:        text,
+		Text:        txt,
 	}
-	res.SetParseMode(telebot.ModeMarkdownV2)
+	res.SetParseMode(telebot.ModeMarkdown)
 	res.SetResultID(fmt.Sprintf("%d-%d", amount, totalPeople))
 	res.SetReplyMarkup(getDongMarkup(0, totalPeople, cardNumber, nil))
 	return res
