@@ -33,7 +33,7 @@ func NewBot(db database.Client, token string, endpoint string, listenPort string
 	bot.Use(middleware.NewUserRetriever(db))
 	bot.registerCommands([]handler.Command{
 		handler.NewStart(db),
-		handler.NewAddCard(db),
+		handler.NewSetCard(db),
 		handler.NewQuery(db),
 		handler.NewInline(db),
 		handler.NewCallback(db),

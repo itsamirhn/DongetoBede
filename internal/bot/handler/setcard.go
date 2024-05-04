@@ -8,21 +8,21 @@ import (
 	"gopkg.in/telebot.v3"
 )
 
-type addCard struct {
+type setCard struct {
 	db database.Client
 }
 
-func NewAddCard(db database.Client) Command {
-	return &addCard{db: db}
+func NewSetCard(db database.Client) Command {
+	return &setCard{db: db}
 }
 
-func (c *addCard) Endpoint() string {
-	return "/addcard"
+func (c *setCard) Endpoint() string {
+	return "/setcard"
 }
 
-func (c *addCard) Handle(ctx telebot.Context) error {
+func (c *setCard) Handle(ctx telebot.Context) error {
 	user := ctx.Get("user").(*entities.User)
-	state := "addcard"
+	state := "setcard"
 	if ctx.Data() != "" {
 		state = ctx.Data()
 	}

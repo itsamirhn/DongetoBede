@@ -27,7 +27,7 @@ func (c *text) Endpoint() string {
 func (c *text) Handle(ctx telebot.Context) error {
 	user := ctx.Get("user").(*entities.User)
 	state := user.State
-	if state == "addcard" {
+	if state == "setcard" {
 		cardNumber := persian.ToEnglishDigits(ctx.Text())
 		if !cardNumberRegexPattern.MatchString(cardNumber) {
 			return ctx.Reply("شماره کارت نامعتبر است. لطفا شماره کارت را به درستی وارد کنید.")
