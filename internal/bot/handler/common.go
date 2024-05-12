@@ -3,7 +3,6 @@ package handler
 import (
 	"fmt"
 	"math"
-	"strconv"
 
 	"github.com/mavihq/persian"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -32,8 +31,7 @@ func getDongMarkup(
 }
 
 func getDongText(amount, totalPeople int, cardNumber string, paidUsers []*entities.User) string {
-	perPerson := int(math.Ceil(float64(amount) / float64(totalPeople)))
-	perPersonStr := persian.Toman(strconv.Itoa(perPerson))
+	perPersonStr := getDongPerPersonToman(amount, totalPeople)
 	txt := fmt.Sprintf("نفری %s", perPersonStr)
 	if cardNumber != "" {
 		txt += fmt.Sprintf("\nشماره کارت: `%s`", persian.ToEnglishDigits(cardNumber))
@@ -49,4 +47,15 @@ func getDongText(amount, totalPeople int, cardNumber string, paidUsers []*entiti
 		}
 	}
 	return txt
+}
+
+func getDongPerPersonToman(amount, totalPeople int) string {
+	priceFloat := float64(amount) / float64(totalPeople)
+	var priceStr string
+	if priceFloat == math.Trunc(priceFloat) {
+		priceStr = fmt.Sprintf("%.0f تومان", priceFloat)
+	} else {
+		priceStr = fmt.Sprintf("%.1f تومان", priceFloat)
+	}
+	return persian.ToPersianDigits(priceStr)
 }

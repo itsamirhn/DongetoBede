@@ -2,7 +2,6 @@ package handler
 
 import (
 	"fmt"
-	"math"
 	"strconv"
 
 	"github.com/mavihq/persian"
@@ -25,8 +24,7 @@ func (c *query) Endpoint() string {
 }
 
 func (c *query) getValidArticle(amount, totalPeople int, cardNumber string) *telebot.ArticleResult {
-	perPerson := int(math.Ceil(float64(amount) / float64(totalPeople)))
-	perPersonStr := persian.Toman(strconv.Itoa(perPerson))
+	perPersonStr := getDongPerPersonToman(amount, totalPeople)
 	totalPeopleStr := persian.ToPersianDigitsFromInt(totalPeople)
 	txt := getDongText(amount, totalPeople, cardNumber, nil)
 	res := &telebot.ArticleResult{

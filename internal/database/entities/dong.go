@@ -1,8 +1,6 @@
 package entities
 
 import (
-	"math"
-
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -18,8 +16,4 @@ type Dong struct {
 	TotalPeople  int                 `bson:"total_people"`
 	PaidUserIDs  []int64             `bson:"paid_user_ids"`
 	MessageID    string              `bson:"message_id"`
-}
-
-func (d *Dong) PerPerson() int {
-	return int(math.Ceil(float64(d.Amount) / float64(d.TotalPeople)))
 }
