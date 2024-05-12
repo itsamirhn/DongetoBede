@@ -41,11 +41,6 @@ func (c *callback) Handle(ctx telebot.Context) error {
 		return errors.New("dong not found")
 	}
 	user := ctx.Get("user").(*entities.User)
-	if dong.IssuerUserID == user.ID {
-		return ctx.Respond(&telebot.CallbackResponse{
-			Text: "تو که مادر خرجی!",
-		})
-	}
 	if slices.Contains(dong.PaidUserIDs, user.ID) {
 		newPaidUserIDs := make([]int64, 0, len(dong.PaidUserIDs))
 		for _, id := range dong.PaidUserIDs {
