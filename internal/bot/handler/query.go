@@ -65,7 +65,7 @@ func (c *query) Handle(ctx telebot.Context) error {
 	q := ctx.Query().Text
 	amountStr := persian.ToEnglishDigits(q)
 	amount, err := strconv.Atoi(amountStr)
-	if err != nil {
+	if amount <= 0 || err != nil {
 		return ctx.Answer(&telebot.QueryResponse{
 			Results: []telebot.Result{c.getInvalidArticle()},
 		})
