@@ -52,12 +52,12 @@ jobs:
       - build
     environment: production
     steps:
-      - name: executing remote ssh commands using password
+      - name: deploying telegram bot using ssh
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sed -i 's/BOT_VERSION="[^\"]*"/BOT_VERSION="v0.4.0"/g' .env
+            sed -i 's/BOT_VERSION="[^\"]*"/BOT_VERSION="${{ github.ref_name }}"/g' .env
             docker compose up -d
