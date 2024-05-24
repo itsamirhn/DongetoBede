@@ -25,5 +25,7 @@ func (c *start) Handle(ctx telebot.Context) error {
 	if strings.HasPrefix(data, "setcard") {
 		return NewSetCard(c.db).Handle(ctx)
 	}
-	return ctx.Reply("به بات دونگ خوش آمدید!")
+	return ctx.Reply(`به بات دونگ خوش آمدید!
+
+برای راهنمایی کار با بات، از دستور /help استفاده کنید.`)
 }
