@@ -1,4 +1,4 @@
-name: ci
+name: Build and Deploy
 
 permissions:
   contents: read
@@ -45,3 +45,19 @@ jobs:
           tags: |
             ghcr.io/itsamirhn/dongetobede:latest
             ghcr.io/itsamirhn/dongetobede:${{ github.ref_name }}
+  deploy:
+    name: Deploy Telegram Bot
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    environment: production
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sed -i 's/BOT_VERSION="[^\"]*"/BOT_VERSION="v0.4.0"/g' .env
+            docker compose up -d
