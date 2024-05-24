@@ -2,21 +2,26 @@ package handler
 
 import (
 	"fmt"
-	"strconv"
+	"math"
 
 	"github.com/mavihq/persian"
 	"gopkg.in/telebot.v3"
 
 	"github.com/itsamirhn/dongetobede/internal/database"
 	"github.com/itsamirhn/dongetobede/internal/database/entities"
+	"github.com/itsamirhn/dongetobede/internal/expression"
 )
 
 type query struct {
-	db database.Client
+	db        database.Client
+	evaluator expression.Evaluator
 }
 
-func NewQuery(db database.Client) Command {
-	return &query{db: db}
+func NewQuery(db database.Client, evaluator expression.Evaluator) Command {
+	return &query{
+		db:        db,
+		evaluator: evaluator,
+	}
 }
 
 func (c *query) Endpoint() string {
@@ -42,11 +47,11 @@ func (c *query) getInvalidArticle() *telebot.ArticleResult {
 	res := &telebot.ArticleResult{
 		Title:       "مبلغ نامعتبر",
 		Description: "مجموع هزینه را به تومان وارد کنید.",
-		Text:        ` مبلغ نامعتبر است. لطفا مبلغ را به صورت عددی وارد کنید.`,
+		Text:        ` مبلغ نامعتبر است. لطفا مبلغ را به صورت  عددی یا یک عبارت ریاضی غیر اعشاری وارد کنید.`,
 	}
 	markup := &telebot.ReplyMarkup{}
 	markup.Inline(
-		markup.Row(markup.QueryChat("مثال", "56000")),
+		markup.Row(markup.QueryChat("مثال", "56000 + 12000")),
 	)
 	res.SetReplyMarkup(markup)
 	res.SetParseMode(telebot.ModeMarkdown)
@@ -63,8 +68,9 @@ func (c *query) getValidArticles(amount int, cardNumber string) []telebot.Result
 
 func (c *query) Handle(ctx telebot.Context) error {
 	q := ctx.Query().Text
-	amountStr := persian.ToEnglishDigits(q)
-	amount, err := strconv.Atoi(amountStr)
+	expressionStr := persian.ToEnglishDigits(q)
+	amountFloat, err := c.evaluator.Eval(expressionStr)
+	amount := int(math.Round(amountFloat))
 	if amount <= 0 || err != nil {
 		return ctx.Answer(&telebot.QueryResponse{
 			Results: []telebot.Result{c.getInvalidArticle()},

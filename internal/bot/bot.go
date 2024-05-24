@@ -10,6 +10,7 @@ import (
 	"github.com/itsamirhn/dongetobede/internal/bot/middleware"
 	"github.com/itsamirhn/dongetobede/internal/config"
 	"github.com/itsamirhn/dongetobede/internal/database"
+	"github.com/itsamirhn/dongetobede/internal/expression"
 	"github.com/itsamirhn/dongetobede/pkg"
 )
 
@@ -17,7 +18,9 @@ type Bot struct {
 	*telebot.Bot
 }
 
-func NewBot(db database.Client, token string, endpoint string, listenPort string) (*Bot, error) {
+func NewBot(db database.Client, evaluator expression.Evaluator,
+	token string, endpoint string, listenPort string,
+) (*Bot, error) {
 	settings := telebot.Settings{
 		Token:   token,
 		Poller:  getTelebotPoller(endpoint, listenPort),
@@ -33,7 +36,7 @@ func NewBot(db database.Client, token string, endpoint string, listenPort string
 	bot.registerCommands([]handler.Command{
 		handler.NewStart(db),
 		handler.NewSetCard(db),
-		handler.NewQuery(db),
+		handler.NewQuery(db, evaluator),
 		handler.NewInline(db),
 		handler.NewCallback(db),
 		handler.NewText(db),

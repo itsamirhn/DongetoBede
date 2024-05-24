@@ -13,6 +13,7 @@ import (
 	"github.com/itsamirhn/dongetobede/internal/bot"
 	"github.com/itsamirhn/dongetobede/internal/config"
 	"github.com/itsamirhn/dongetobede/internal/database"
+	"github.com/itsamirhn/dongetobede/internal/expression"
 )
 
 func init() {
@@ -50,7 +51,9 @@ func serve(cmd *cobra.Command, _ []string) {
 }
 
 func createBotOrPanic(db database.Client) *bot.Bot {
-	b, err := bot.NewBot(db, config.GlobalConfig.Token, config.GlobalConfig.Endpoint, config.GlobalConfig.ListenPort)
+	evaluator := expression.NewCelEvaluator()
+	b, err := bot.NewBot(db, evaluator,
+		config.GlobalConfig.Token, config.GlobalConfig.Endpoint, config.GlobalConfig.ListenPort)
 	if err != nil {
 		logrus.WithError(err).Panic("failed to create bot")
 	}
