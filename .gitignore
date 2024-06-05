@@ -1,5 +1,8 @@
 .idea
 dong
+.task
+.env
+
 .bin
 .run
 
@@ -176,5 +179,3 @@ Temporary Items
 *.icloud
 
 # End of https://www.toptal.com/developers/gitignore/api/goland,go,macos
-
-config.yaml

@@ -1,0 +1,63 @@
+version: '3'
+
+vars:
+  MONGO_VERSION: '4.4.6'
+  MONGO_CONTAINER_NAME: 'dong-mongo'
+
+env:
+  DEBUG: 'true'
+  DB_URI: 'mongodb://localhost:27017'
+  DB_NAME: 'dong'
+
+dotenv:
+  - .env
+
+tasks:
+  build:
+    sources: [ './**/*.go' ]
+    cmds:
+      - go build -o dong
+
+  mod:
+    desc: Downloads and tidy Go modules
+    cmds:
+      - go mod download
+      - go mod tidy
+
+  lint:
+    desc: Runs golangci-lint
+    aliases: [ l ]
+    sources:
+      - './**/*.go'
+      - .golangci.yml
+    cmds:
+      - golangci-lint run
+
+  lint:fix:
+    desc: Runs golangci-lint and fixes any issues
+    sources:
+      - './**/*.go'
+      - .golangci.yml
+    cmds:
+      - golangci-lint run --fix
+
+  mongo:start:
+    desc: Starts the MongoDB container
+    cmds:
+      - docker run -d --name {{.MONGO_CONTAINER_NAME}} -p 27017:27017 mongo:{{.MONGO_VERSION}}
+    status:
+      - docker ps | grep {{.MONGO_CONTAINER_NAME}}
+
+  mongo:stop:
+    desc: Stops the MongoDB container
+    cmds:
+      - docker stop {{.MONGO_CONTAINER_NAME}}
+      - docker rm {{.MONGO_CONTAINER_NAME}}
+
+  serve:
+    desc: Runs the server
+    deps:
+      - mongo:start
+    cmds:
+      - defer: { task: mongo:stop }
+      - ./dong serve
