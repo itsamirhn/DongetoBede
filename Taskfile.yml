@@ -14,12 +14,21 @@ dotenv:
 
 tasks:
   build:
-    sources: [ './**/*.go' ]
+    sources:
+      - './**/*.go'
+      - go.mod
+      - go.sum
+    deps: [ mod ]
     cmds:
       - go build -o dong
+    generates:
+      - dong
 
   mod:
     desc: Downloads and tidy Go modules
+    sources:
+      - go.mod
+      - go.sum
     cmds:
       - go mod download
       - go mod tidy
