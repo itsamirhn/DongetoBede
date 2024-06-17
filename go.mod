@@ -8,7 +8,7 @@ require (
 	github.com/mavihq/persian v0.0.0-20231020110200-3e779b10be51
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.9.3
-	github.com/spf13/cobra v1.8.0
+	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
 	go.mongodb.org/mongo-driver v1.15.0
 	gopkg.in/telebot.v3 v3.2.1
