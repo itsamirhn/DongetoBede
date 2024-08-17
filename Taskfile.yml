@@ -67,6 +67,7 @@ tasks:
     desc: Runs the server
     deps:
       - mongo:start
+      - build
     cmds:
       - defer: { task: mongo:stop }
       - ./dong serve
