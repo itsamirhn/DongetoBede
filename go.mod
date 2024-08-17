@@ -3,7 +3,7 @@ module github.com/itsamirhn/dongetobede
 go 1.22
 
 require (
-	github.com/google/cel-go v0.20.1
+	github.com/google/cel-go v0.21.0
 	github.com/google/uuid v1.6.0
 	github.com/mavihq/persian v0.0.0-20231020110200-3e779b10be51
 	github.com/pkg/errors v0.9.1
