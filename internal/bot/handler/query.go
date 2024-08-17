@@ -28,7 +28,7 @@ func (c *query) Endpoint() string {
 	return telebot.OnQuery
 }
 
-func (c *query) getValidArticle(amount, totalPeople int, cardNumber string) *telebot.ArticleResult {
+func (c *query) getValidLimitedArticle(amount, totalPeople int, cardNumber string) *telebot.ArticleResult {
 	perPersonStr := getDongPerPersonToman(amount, totalPeople)
 	totalPeopleStr := persian.ToPersianDigitsFromInt(totalPeople)
 	txt := getDongText(amount, totalPeople, cardNumber, nil)
@@ -40,6 +40,20 @@ func (c *query) getValidArticle(amount, totalPeople int, cardNumber string) *tel
 	res.SetParseMode(telebot.ModeMarkdown)
 	res.SetResultID(fmt.Sprintf("%d-%d", amount, totalPeople))
 	res.SetReplyMarkup(getDongMarkup(0, totalPeople, cardNumber, nil))
+	return res
+}
+
+func (c *query) getValidUnlimitedArticle(amount int, cardNumber string) *telebot.ArticleResult {
+	perPersonStr := getDongPerPersonToman(amount, 0)
+	txt := getDongText(amount, 0, cardNumber, nil)
+	res := &telebot.ArticleResult{
+		Title:       "دنگ نامحدود",
+		Description: fmt.Sprintf("نفری %s", perPersonStr),
+		Text:        txt,
+	}
+	res.SetParseMode(telebot.ModeMarkdown)
+	res.SetResultID(fmt.Sprintf("%d-%d", amount, 0))
+	res.SetReplyMarkup(getDongMarkup(0, 0, cardNumber, nil))
 	return res
 }
 
@@ -60,8 +74,9 @@ func (c *query) getInvalidArticle() *telebot.ArticleResult {
 
 func (c *query) getValidArticles(amount int, cardNumber string) []telebot.Result {
 	var results []telebot.Result
+	results = append(results, c.getValidUnlimitedArticle(amount, cardNumber))
 	for i := 2; i <= 15; i++ {
-		results = append(results, c.getValidArticle(amount, i, cardNumber))
+		results = append(results, c.getValidLimitedArticle(amount, i, cardNumber))
 	}
 	return results
 }

@@ -16,9 +16,12 @@ func getDongMarkup(
 	_ string,
 	dongID *primitive.ObjectID,
 ) *telebot.ReplyMarkup {
-	paidUsersCountStr := persian.ToPersianDigitsFromInt(paidUsersCount)
-	totalPeopleStr := persian.ToPersianDigitsFromInt(totalPeople)
-	btnText := fmt.Sprintf("دنگمو دادم (%s/%s)", paidUsersCountStr, totalPeopleStr)
+	var btnText string
+	if totalPeople > 0 {
+		btnText = fmt.Sprintf("دنگمو دادم (%s/%s)", persian.ToPersianDigitsFromInt(paidUsersCount), persian.ToPersianDigitsFromInt(totalPeople))
+	} else {
+		btnText = fmt.Sprintf("دنگمو دادم (%s)", persian.ToPersianDigitsFromInt(paidUsersCount))
+	}
 	markup := &telebot.ReplyMarkup{}
 	rows := make([]telebot.Row, 0, 2)
 	if dongID == nil {
@@ -50,7 +53,10 @@ func getDongText(amount, totalPeople int, cardNumber string, paidUsers []*entiti
 }
 
 func getDongPerPersonToman(amount, totalPeople int) string {
-	priceFloat := float64(amount) / float64(totalPeople)
+	priceFloat := float64(amount)
+	if totalPeople > 0 {
+		priceFloat = priceFloat / float64(totalPeople)
+	}
 	var priceStr string
 	if priceFloat == math.Trunc(priceFloat) {
 		priceStr = fmt.Sprintf("%.0f تومان", priceFloat)
