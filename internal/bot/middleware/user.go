@@ -27,6 +27,8 @@ func NewUserRetriever(db database.Client) telebot.MiddlewareFunc {
 					if err != nil {
 						return err
 					}
+				} else if err != nil {
+					return err
 				}
 				ctx.Set("user", user)
 			}
