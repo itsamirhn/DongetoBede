@@ -52,12 +52,14 @@ jobs:
       - build
     environment: production
     steps:
-      - name: deploying telegram bot using ssh
-        uses: appleboy/ssh-action@v1.1.0
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            sed -i 's/BOT_VERSION="[^\"]*"/BOT_VERSION="${{ github.ref_name }}"/g' .env
-            docker compose up -d
+          fetch-depth: 0
+
+      - name: Push to dokku
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: 'ssh://dokku@${{ vars.DOKKU_HOST }}:22/${{ vars.DOKKU_APP_NAME }}'
+          ssh_private_key: ${{ secrets.DOKKU_SSH_PRIVATE_KEY }}
+          deploy_docker_image: 'ghcr.io/itsamirhn/dongetobede:${{ github.ref_name }}'

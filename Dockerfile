@@ -14,6 +14,6 @@ FROM alpine:latest as runner
 
 COPY --from=builder /go/dong /usr/local/bin/dong
 
-EXPOSE 80
+ENV DONG_BOT_LISTEN_PORT 5000
 
-ENTRYPOINT ["dong"]
+ENTRYPOINT ["dong", "serve"]
