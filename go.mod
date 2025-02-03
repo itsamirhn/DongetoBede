@@ -3,7 +3,7 @@ module github.com/itsamirhn/dongetobede
 go 1.22
 
 require (
-	github.com/google/cel-go v0.22.1
+	github.com/google/cel-go v0.23.2
 	github.com/google/uuid v1.6.0
 	github.com/mavihq/persian v0.0.0-20231020110200-3e779b10be51
 	github.com/pkg/errors v0.9.1
@@ -15,7 +15,7 @@ require (
 )
 
 require (
-	cel.dev/expr v0.18.0 // indirect
+	cel.dev/expr v0.19.1 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
